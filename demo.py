@@ -2,6 +2,7 @@ import tweepy
 import csv
 from textblob import TextBlob
 
+# initializing the keys, auth, and api
 consumerKey = 'AXPpBN95g4iGYH5dCbCTK4Ge0'
 consumerSecret = '5Ql3WzXmSFgIMGbxxpRZyPX2XSMWqV3S70BX7urvqViNzSXtmx'
 
@@ -13,11 +14,13 @@ auth.set_access_token(accessToken, accessTokenSecret)
 
 api = tweepy.API(auth)
 
+# ask the user what they'd like to search for
 searchTerm = input("""What's on your mind? I can make a documennt
 	to tell you what twitter has to think of it. Type in a topic 
 	word and let's see what the world thinks about it: """)
 publicTweets = api.search(searchTerm)
 
+# create the CSV to write the tweets to with positive and negative labels
 myFile = open('tweetSentiment.csv', 'w')
 
 with myFile:
@@ -25,6 +28,8 @@ with myFile:
 	writer = csv.DictWriter(myFile, fieldnames=myLabels)
 	writer.writeheader()
 
+# for every tweet, if it is of positive sentiment write it under
+# the positive column and visa versa
 	for tweet in publicTweets:
 		analysis = TextBlob(tweet.text)
 		if analysis.sentiment.polarity >= 0:
